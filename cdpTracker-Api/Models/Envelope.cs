@@ -1,4 +1,4 @@
-﻿using cdpTracker_Api.Model;
+﻿using cdpTracker_Api.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace cdpTracker_Api.Models
@@ -8,7 +8,7 @@ namespace cdpTracker_Api.Models
         public int Id { get; set; }
 
         [Required]
-        [StringLength(4, MinimumLength = 4)] // Ensures exactly 4 digits
+        [StringLength(4, MinimumLength = 4)]
         public string Code { get; set; } = string.Empty;
 
         [Required]
@@ -16,7 +16,7 @@ namespace cdpTracker_Api.Models
 
         public DateTime RecordedAt { get; set; } = DateTime.UtcNow;
 
-        // Foreign Key to Worker
+        // Foreign Key: This links the envelope to a specific Worker
         public int WorkerId { get; set; }
         public Worker Worker { get; set; } = null!;
     }

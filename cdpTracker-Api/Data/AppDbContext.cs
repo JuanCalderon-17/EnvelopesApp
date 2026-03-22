@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using cdpTracker_Api.Models;
 
 namespace cdpTracker_Api.Data
 {
