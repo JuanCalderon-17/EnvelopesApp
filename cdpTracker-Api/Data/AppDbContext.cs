@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace cdpTracker_Api.Data
 {
-    public class AppDbContext
+    public class AppDbContext : DbContext
     {
         //class contructor,it takes in the options and passes it to the base class constructor
         public AppDbContext(DbContextOptions<AppDbContext> options)
@@ -12,7 +12,7 @@ namespace cdpTracker_Api.Data
         }
 
         // this are the tables in the database, each DbSet represents a table in the database and the type parameter is the model class that represents the table
-        public DbSet<Workers> Workers { get; set; }
-        public DbSet<Envelopes> Envelopes { get; set; }
-
+        public DbSet<Worker> Workers { get; set; }
+        public DbSet<Envelope> Envelopes { get; set; }
     }
+}
