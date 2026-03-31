@@ -1,57 +1,9 @@
-<<<<<<< HEAD
-=======
+
 ﻿using Microsoft.EntityFrameworkCore;
->>>>>>> 2e0d26a (update controller, now code is always an string instead of int)
 using Microsoft.AspNetCore.Mvc;
 using cdpTracker_Api.Data;
 using cdpTracker_Api.Models;
 using cdpTracker_Api.DTOs;
-<<<<<<< HEAD
-using Microsoft.EntityFrameworkCore;
-
-namespace cdpTracker_Api.Controllers
-{
-	[Route("api/[controller]")]
-	[ApiController]
-	public class EnvelopesController : ControllerBase
-	{
-		private readonly AppDbContext _context;
-
-		public EnvelopesController(AppDbContext context)
-		{
-			_context = context;
-		}
-
-		[HttpPost]
-		public async Task<IActionResult> CreateEnvelope([FromBody] CreateEnvelopeRequest request)
-		{
-			//validation basic business rules
-			if (request.Amount <= 0) return BadRequest("Amount must be greater than zero.");
-			if (request.Code.Length != 4) return BadRequest("Code must be 4 digits");
-
-			//verification, does the worker exist in the db
-			var workerExist = await _context.Workers.AnyAsync(w => w.Id == request.WorkerId);
-			if (!workerExist) return NotFound("Worker not found.");
-
-			//Mapping, this converts dto to database model
-			var newEnvelope = new Envelope
-			{
-				Code = request.Code,
-				Amount = request.Amount,
-				WorkerId = request.WorkerId,
-				RecordedAt = DateTime.UtcNow
-			};
-
-			//Persistence, this saves the new envelope to the database
-			_context.Envelopes.Add(newEnvelope);
-			await _context.SaveChangesAsync();
-
-			return Ok(new { Message = "Envelope created successfully", EnvelopeId = newEnvelope.Id });
-		}
-	}
-}
-=======
-
 
 namespace cdpTracker_Api.Controllers
 {
@@ -61,7 +13,7 @@ namespace cdpTracker_Api.Controllers
     {
         private readonly AppDbContext _context;
         public EnvelopesController(AppDbContext context)
-        { 
+        {
             _context = context;
         }
 
@@ -92,10 +44,33 @@ namespace cdpTracker_Api.Controllers
             _context.Envelopes.Add(newEnvelope);
             await _context.SaveChangesAsync();
 
-            return Ok(new { Message = "Evelope recorder sucessfull!", Id = newEnvelope.Id});
+            return Ok(new { Message = "Evelope recorder sucessfull!", Id = newEnvelope.Id });
 
 
         }
+
+        [HttpGet("worker/{workerId}")]//worker id es el parametro que se va a pasar en la url para obtener los sobres de un trabajador especifico para autorizar
+        public async Task<IActionResult> GetWorkerEnvelopes(int workerId)
+        {
+            //verificar que el trabajador exista
+            var workerExists = await _context.Workers.AnyAsync(w => w.Id == workerId);
+            if (!workerExists)
+            {
+                return NotFound("Worker not found.");
+            }
+            //obtener los sobres del trabajador especifico
+            var envelopes = await _context.Envelopes
+                .Where(e => e.WorkerId == workerId)
+                .OrderByDescending(e => e.RecordedAt)
+                .ToListAsync();
+
+            if (envelopes == null || envelopes.Count == 0)
+            {
+                return NotFound("No envelopes found for this worker.");
+            }
+
+            return Ok(envelopes);
+        }
     }
 }
->>>>>>> 2e0d26a (update controller, now code is always an string instead of int)
+

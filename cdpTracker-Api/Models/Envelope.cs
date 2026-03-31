@@ -9,7 +9,7 @@ namespace cdpTracker_Api.Models
 
         [Required]
         [StringLength(4, MinimumLength = 4)]
-        public int Code { get; set; } = int.Empty;
+        public string Code { get; set; } = string.Empty;
 
         [Required]
         public decimal Amount { get; set; }
