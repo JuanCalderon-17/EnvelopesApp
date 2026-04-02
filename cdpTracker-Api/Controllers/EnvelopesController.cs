@@ -49,19 +49,27 @@ namespace cdpTracker_Api.Controllers
 
         }
 
-        [HttpGet("worker/{workerId}")]//worker id es el parametro que se va a pasar en la url para obtener los sobres de un trabajador especifico para autorizar
+        [HttpGet("worker/{workerId}")]//workerId is a parameter in the url, helps to identify which worker's envelopes retrieve
         public async Task<IActionResult> GetWorkerEnvelopes(int workerId)
         {
-            //verificar que el trabajador exista
+            //verify the worker exists before trying to retrieve the envelopes
             var workerExists = await _context.Workers.AnyAsync(w => w.Id == workerId);
             if (!workerExists)
             {
                 return NotFound("Worker not found.");
             }
-            //obtener los sobres del trabajador especifico
+            //obtaining the envelopes from that specific worker
             var envelopes = await _context.Envelopes
                 .Where(e => e.WorkerId == workerId)
                 .OrderByDescending(e => e.RecordedAt)
+                .Select(e => new EnvelopeResponse //mapping from database model to dto for response, only return the necessary information to the client
+                { 
+                  Id = e.Id,
+                  Code = e.Code,
+                  Amount = e.Amount, 
+                  RecordedAt = e.RecordedAt,
+                  WorkerId = e.WorkerId
+                })
                 .ToListAsync();
 
             if (envelopes == null || envelopes.Count == 0)
