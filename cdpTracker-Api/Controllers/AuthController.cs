@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+//using Microsoft.EntityFrameworkCore
 using Microsoft.AspNetCore.Mvc;
 using cdpTracker_Api.Data;
 using cdpTracker_Api.DTOs;
@@ -10,23 +13,30 @@ namespace cdpTracker_Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly AppDbContext _context;
-        public AuthController(AppDbContext context)
+        private readonly IConfiguration _config; // inject IConfiguration and read Key of appsettings.json
+        public AuthController(AppDbContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             //Find the worker by name using LINQ
-            var worker = _context.Workers.FirstOrDefault(w => w.Name == request.Name);
+            var worker =  await _context.Workers
+                .FirstOrDefaultAsync(w => w.Name == request.Name && w.PasswordHash == request.Password);
 
             //Check if worker exists and password matches
-            if (worker == null || worker.PasswordHash != request.Password)
-            {
-                return Unauthorized("Invalid username or password.");
-            }
+            if (worker == null) return Unauthorized("Invalid username or password.");
 
-            // If authentication is successful, and return the worker's information
+            //create the claims 
+            //generate secret signature key
+            //create the token
+
+
+
+
+            // If authentication is successful, return token and worker info
             return Ok(new
             {
                 worker.Id,

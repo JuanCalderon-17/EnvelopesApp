@@ -1,9 +1,10 @@
 
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
 using cdpTracker_Api.Data;
-using cdpTracker_Api.Models;
 using cdpTracker_Api.DTOs;
+using cdpTracker_Api.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace cdpTracker_Api.Controllers
 {
@@ -48,7 +49,7 @@ namespace cdpTracker_Api.Controllers
 
 
         }
-
+        
         [HttpGet("worker/{workerId}")]//workerId is a parameter in the url, helps to identify which worker's envelopes retrieve
         public async Task<IActionResult> GetWorkerEnvelopes(int workerId)
         {
