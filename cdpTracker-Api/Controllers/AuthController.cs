@@ -42,6 +42,10 @@ namespace cdpTracker_Api.Controllers
 
 
             //generate secret signature key
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+
             //create the token
 
 
