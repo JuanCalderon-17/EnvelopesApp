@@ -57,15 +57,12 @@ namespace cdpTracker_Api.Controllers
              );
 
 
-
-            // If authentication is successful, return token and worker info
+            // return token and worker info
             return Ok(new
             {
-                worker.Id,
-                worker.Name,
-                worker.Role,
-                worker.Kiosko,
-
+                token =  new JwtSecurityTokenHandler().WriteToken(token),
+                Expiration = token.ValidTo,
+                WorkerName = worker.Name
             });
         }
     }
