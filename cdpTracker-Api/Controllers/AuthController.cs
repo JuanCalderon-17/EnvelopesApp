@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-//using Microsoft.EntityFrameworkCore
-using Microsoft.AspNetCore.Mvc;
-using cdpTracker_Api.Data;
+﻿using cdpTracker_Api.Data;
 using cdpTracker_Api.DTOs;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace cdpTracker_Api.Controllers
 {
@@ -30,6 +32,15 @@ namespace cdpTracker_Api.Controllers
             if (worker == null) return Unauthorized("Invalid username or password.");
 
             //create the claims 
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, worker.Id.ToString()),
+                new Claim(ClaimTypes.Name, worker.Name),
+                new Claim(ClaimTypes.Role, worker.Role.ToString()),
+                new Claim("kiosko", worker.Kiosko.ToString())
+            };
+
+
             //generate secret signature key
             //create the token
 
