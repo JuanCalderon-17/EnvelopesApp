@@ -50,10 +50,10 @@ namespace cdpTracker_Api.Controllers
             var token = new JwtSecurityToken
             (
             issuer: _config["Jwt:Issuer"],
-            audience: _config["Jwt: Audience"],
+            audience: _config["Jwt:Audience"],
             claims: claims, 
             expires: DateTime.Now.AddHours(5), //token valid for 5 hours
-            signingCredentials: creds   
+            signingCredentials: creds
              );
 
 

@@ -16,8 +16,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 //jwt authentication configuration
-var jwtSettings = builder.Configuration.GetSection("Jwt");  
-var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]);
+var jwtSettings = builder.Configuration.GetSection("Jwt");
+var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -49,7 +49,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
