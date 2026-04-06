@@ -10,6 +10,7 @@ namespace cdpTracker_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EnvelopesController : ControllerBase
     {
         private readonly AppDbContext _context;
