@@ -5,6 +5,7 @@ using cdpTracker_Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace cdpTracker_Api.Controllers
 {
@@ -26,7 +27,16 @@ namespace cdpTracker_Api.Controllers
             if (request.Amount <= 0)
                 return BadRequest("Amount must be greater than zero");
 
-            // Now verification follows, does the worker exist
+            //extract workerId from the token claims , this is the authenticated user making the request, ensures that the worker can only create envelopes for themselves
+            var userIdClaim =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (String.IsNullOrEmpty(userIdClaim))
+            { 
+                return Unauthorized("You are not authorized to create an envelope for this worker.");
+            }
+            int workerId = int.Parse(userIdClaim);
+
+
+            // verification follows, does the worker exist
             var workerExists = await _context.Workers.AnyAsync(w => w.Id == request.WorkerId);
             if (!workerExists)
             {
@@ -46,7 +56,7 @@ namespace cdpTracker_Api.Controllers
             _context.Envelopes.Add(newEnvelope);
             await _context.SaveChangesAsync();
 
-            return Ok(new { Message = "Evelope recorder sucessfull!", Id = newEnvelope.Id });
+            return Ok(new { Message = "Evelope recorded sucessfull!", Id = newEnvelope.Id });
 
 
         }
