@@ -33,11 +33,11 @@ namespace cdpTracker_Api.Controllers
             { 
                 return Unauthorized("You are not authorized to create an envelope for this worker.");
             }
-            int workerId = int.Parse(userIdClaim);
+            int workerId = int.Parse(userIdClaim); //convert the userIdClaim to an integer
 
 
             // verification follows, does the worker exist
-            var workerExists = await _context.Workers.AnyAsync(w => w.Id == request.WorkerId);
+           // remove var workerExists = await _context.Workers.AnyAsync(w => w.Id == request.WorkerId);
             if (!workerExists)
             {
                 return NotFound("Worker not found.");
