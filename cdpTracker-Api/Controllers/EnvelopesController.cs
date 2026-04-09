@@ -31,16 +31,16 @@ namespace cdpTracker_Api.Controllers
             var userIdClaim =  User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (String.IsNullOrEmpty(userIdClaim))
             { 
-                return Unauthorized("You are not authorized to create an envelope for this worker.");
+                return Unauthorized("You are not authorized to create an envelope for this worker.Worker not found.");
             }
             int workerId = int.Parse(userIdClaim); //convert the userIdClaim to an integer
 
 
             // verification follows, does the worker exist
-           // remove var workerExists = await _context.Workers.AnyAsync(w => w.Id == request.WorkerId);
+           var workerExists = await _context.Workers.AnyAsync(w => w.Id == request.WorkerId);
             if (!workerExists)
             {
-                return NotFound("Worker not found.");
+                return NotFound("You are not authorized to create an envelope for this worker.");
             }
 
             // Mapping, convert dto to database model
