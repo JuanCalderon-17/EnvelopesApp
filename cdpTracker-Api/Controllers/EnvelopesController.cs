@@ -65,12 +65,16 @@ namespace cdpTracker_Api.Controllers
         [HttpGet("worker/{workerId}")]//workerId is a parameter in the url, helps to identify which worker's envelopes retrieve
         public async Task<IActionResult> GetWorkerEnvelopes(int workerId)
         {
-            //verify the worker exists before trying to retrieve the envelopes
-            var workerExists = await _context.Workers.AnyAsync(w => w.Id == workerId);
-            if (!workerExists)
+             //validate  identity token vs Url
+            //extrat workerId from the token claims, this is the authenticated user making the request, ensures the worker can only access their own envelopes
+            var workerIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(workerIdClaim, out int workerIdValid) || workerIdValid != workerId)
             {
-                return NotFound("Worker not found.");
+                return Forbid("You are not authorized to access the envelopes for this worker.");
             }
+
+
+            //check if the worker exist in the database, this is to ensure that we are trying to retrieve envelopes for a valid worker
             //obtaining the envelopes from that specific worker
             var envelopes = await _context.Envelopes
                 .Where(e => e.WorkerId == workerId)
@@ -85,6 +89,8 @@ namespace cdpTracker_Api.Controllers
                 })
                 .ToListAsync();
 
+
+            //check if any envelopes were found for the worker, if not return a not found response
             if (envelopes == null || envelopes.Count == 0)
             {
                 return NotFound("No envelopes found for this worker.");
