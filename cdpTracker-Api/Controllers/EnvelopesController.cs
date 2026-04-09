@@ -29,18 +29,11 @@ namespace cdpTracker_Api.Controllers
 
             //extract workerId from the token claims , this is the authenticated user making the request, ensures that the worker can only create envelopes for themselves
             var userIdClaim =  User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (String.IsNullOrEmpty(userIdClaim))
+            var workerIdClaim = int.TryParse(userIdClaim, out int workerId) ? workerId : (int?)null; //convert the userIdClaim to an integer
+
+            if (workerIdClaim != request.WorkerId)
             { 
                 return Unauthorized("You are not authorized to create an envelope for this worker.Worker not found.");
-            }
-            int workerId = int.Parse(userIdClaim); //convert the userIdClaim to an integer
-
-
-            // verification follows, does the worker exist
-           var workerExists = await _context.Workers.AnyAsync(w => w.Id == request.WorkerId);
-            if (!workerExists)
-            {
-                return NotFound("You are not authorized to create an envelope for this worker.");
             }
 
             // Mapping, convert dto to database model
@@ -51,6 +44,14 @@ namespace cdpTracker_Api.Controllers
                 WorkerId = request.WorkerId,
                 RecordedAt = DateTime.UtcNow, //server side timestamp for security
             };
+
+            //check if envelope code already exist in the database, only unique codes are allowed
+            var envelopeCodeExist = await _context.Envelopes.AnyAsync(e => e.Code == newEnvelope.Code);
+            if (envelopeCodeExist)
+            { 
+                return BadRequest ("An envelope with this code already exists. Please use a unique code.");
+            }
+
 
             //persistence, save to database(postgres)
             _context.Envelopes.Add(newEnvelope);
