@@ -39,6 +39,22 @@ builder.Services.AddAuthentication(options =>
 });
 
 
+// Cors configuration, allow request from the frontend app running on localhost 4200
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("allowAngularDevClient", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+
+
+
+
+// Build the app
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
@@ -48,7 +64,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("allowAngularDevClient");
 app.UseAuthentication();
 app.UseAuthorization();
 
