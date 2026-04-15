@@ -60,9 +60,10 @@ namespace cdpTracker_Api.Controllers
             // return token and worker info
             return Ok(new
             {
-                token =  new JwtSecurityTokenHandler().WriteToken(token),
-                Expiration = token.ValidTo,
-                WorkerName = worker.Name
+                token = new JwtSecurityTokenHandler().WriteToken(token),
+                expiration = token.ValidTo,
+                workerName = worker.Name,
+                workerId = worker.Id
             });
         }
     }

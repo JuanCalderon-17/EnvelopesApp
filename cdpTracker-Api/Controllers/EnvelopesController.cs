@@ -45,11 +45,13 @@ namespace cdpTracker_Api.Controllers
                 RecordedAt = DateTime.UtcNow, //server side timestamp for security
             };
 
-            //check if envelope code already exist in the database, only unique codes are allowed
-            var envelopeCodeExist = await _context.Envelopes.AnyAsync(e => e.Code == newEnvelope.Code);
+            //check if envelope code already exists today, codes are unique per day
+            var today = DateTime.UtcNow.Date;
+            var envelopeCodeExist = await _context.Envelopes
+                .AnyAsync(e => e.Code == newEnvelope.Code && e.RecordedAt.Date == today);
             if (envelopeCodeExist)
-            { 
-                return BadRequest ("An envelope with this code already exists. Please use a unique code.");
+            {
+                return BadRequest("An envelope with this code already exists today. Please use a unique code.");
             }
 
 

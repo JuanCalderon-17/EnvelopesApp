@@ -1,4 +1,5 @@
 using cdpTracker_Api.Data;
+using cdpTracker_Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;    
 using Microsoft.IdentityModel.Tokens;
@@ -12,7 +13,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase);
 builder.Services.AddOpenApi();
 
 //jwt authentication configuration
@@ -53,6 +56,8 @@ builder.Services.AddCors(options =>
 
 
 
+
+builder.Services.AddHostedService<CleanupService>();
 
 // Build the app
 var app = builder.Build();

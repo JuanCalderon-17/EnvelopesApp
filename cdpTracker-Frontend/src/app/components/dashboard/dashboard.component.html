@@ -1,0 +1,91 @@
+<!-- Header -->
+<header class="dash-header">
+  <span class="kiosk-name">{{ workerName }}</span>
+  <button class="btn-logout" (click)="logout()">Salir</button>
+</header>
+
+<!-- Totals bar -->
+<div class="totals-bar">
+  <span>{{ totalCount }} sobres</span>
+  <span>{{ totalAmount | currency:'MXN':'symbol':'1.2-2' }}</span>
+</div>
+
+<!-- Week navigation -->
+<nav class="week-nav">
+  <button class="btn-week" (click)="previousWeek()">&#8249; Anterior</button>
+  <span class="week-label">{{ weekRangeLabel }}</span>
+  <button class="btn-week" (click)="nextWeek()" [disabled]="isCurrentWeek()">Siguiente &#8250;</button>
+</nav>
+
+<!-- Envelope list -->
+<main class="envelope-list">
+  @if (dayGroups.length === 0) {
+    <p class="empty-msg">No hay sobres esta semana.</p>
+  }
+
+  @for (group of dayGroups; track group.label) {
+    <section class="day-section">
+      <h2 class="day-label">{{ group.label }}</h2>
+
+      @for (env of group.envelopes; track env.id) {
+        <div class="envelope-card">
+          <span class="env-code">{{ env.code }}</span>
+          <span class="env-amount">{{ env.amount | currency:'MXN':'symbol':'1.2-2' }}</span>
+          <span class="env-time">{{ env.recordedAt | date:'HH:mm' }}</span>
+        </div>
+      }
+    </section>
+  }
+</main>
+
+<!-- FAB -->
+<button class="fab" (click)="toggleForm()" [attr.aria-label]="showForm ? 'Cerrar formulario' : 'Nuevo sobre'">
+  {{ showForm ? '✕' : '+' }}
+</button>
+
+<!-- Bottom-sheet create form -->
+@if (showForm) {
+  <div class="form-overlay" (click)="toggleForm()">
+    <div class="form-panel" (click)="$event.stopPropagation()">
+      <h3>Nuevo Sobre</h3>
+
+      <form [formGroup]="createForm" (ngSubmit)="submitEnvelope()">
+        <div class="form-group">
+          <label for="code">Código (4 dígitos)</label>
+          <input
+            id="code"
+            type="text"
+            formControlName="code"
+            maxlength="4"
+            inputmode="numeric"
+            placeholder="0000"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="amount">Monto</label>
+          <input
+            id="amount"
+            type="number"
+            formControlName="amount"
+            inputmode="decimal"
+            placeholder="0.00"
+            step="0.01"
+            min="0.01"
+          />
+        </div>
+
+        @if (createError) {
+          <p class="error-message">{{ createError }}</p>
+        }
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="toggleForm()">Cancelar</button>
+          <button type="submit" class="btn-submit" [disabled]="isSubmitting">
+            {{ isSubmitting ? 'Guardando...' : 'Guardar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
