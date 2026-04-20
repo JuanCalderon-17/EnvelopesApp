@@ -1,3 +1,14 @@
+# Sensitive config — never commit these
+
+# Claude Code internal files — keep private
+.claude/
+CLAUDE.md
+memory/
+appsettings.json
+appsettings.Development.json
+.env
+*.env
+
 ### Angular ###
 ## Angular ##
 # compiled output

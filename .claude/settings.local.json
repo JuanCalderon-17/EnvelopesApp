@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Read(//c/Dev/EnvelopesApp/**)"
+      "Read(//c/Dev/EnvelopesApp/**)",
+      "Bash(curl -k -s -o /dev/null -w \"%{http_code}\" -X POST https://localhost:7091/api/auth/login -H \"Content-Type: application/json\" -d \"{\\\\\"name\\\\\":\\\\\"Admin Manager\\\\\",\\\\\"password\\\\\":\\\\\"hashed_admin_pass\\\\\"}\")",
+      "Bash(curl -k -s -X POST https://localhost:7091/api/auth/login -H \"Content-Type: application/json\" -d \"{\\\\\"name\\\\\":\\\\\"Admin Manager\\\\\",\\\\\"password\\\\\":\\\\\"hashed_admin_pass\\\\\"}\")"
     ]
   }
 }

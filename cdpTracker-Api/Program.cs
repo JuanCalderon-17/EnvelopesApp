@@ -20,7 +20,14 @@ builder.Services.AddOpenApi();
 
 //jwt authentication configuration
 var jwtSettings = builder.Configuration.GetSection("Jwt");
-var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
+
+// JWT secret: env variable takes priority over appsettings.json
+// In production set: JWT_SECRET_KEY=<your-long-random-key>
+var jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY")
+    ?? jwtSettings["Key"]
+    ?? throw new InvalidOperationException("JWT Key not configured.");
+
+var key = Encoding.UTF8.GetBytes(jwtKey);
 
 builder.Services.AddAuthentication(options =>
 {

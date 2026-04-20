@@ -7,32 +7,58 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f0f2f5;
-  padding: 1rem;
+  padding: 1.5rem;
+
+  /* Foto del kiosko de fondo */
+  background-image: url('/kiosko.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+/* Overlay oscuro para que el formulario sea legible */
+.login-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
 }
 
 .login-card {
-  background: #fff;
-  border-radius: 12px;
+  position: relative; /* encima del overlay */
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 16px;
   padding: 2rem 1.5rem;
   width: 100%;
-  max-width: 360px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  max-width: 340px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.login-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.login-logo img {
+  width: 56px;
+  height: auto;
 }
 
 .login-title {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 1.4rem;
+  font-weight: 800;
   color: #da291c;
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.2rem;
   text-align: center;
+  letter-spacing: -0.02em;
 }
 
 .login-subtitle {
-  color: #666;
+  color: #777;
   text-align: center;
   margin: 0 0 1.5rem;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .form-group {
@@ -43,48 +69,54 @@
 }
 
 .form-group label {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  color: #333;
+  color: #444;
 }
 
 .form-group input {
-  border: 1px solid #ccc;
+  border: 1.5px solid #ddd;
   border-radius: 8px;
   padding: 0.75rem;
   font-size: 1rem;
   outline: none;
   transition: border-color 0.2s;
   font-family: inherit;
+  background: #fafafa;
 }
 
 .form-group input:focus {
   border-color: #da291c;
+  background: #fff;
 }
 
 .error-message {
   color: #c0392b;
-  font-size: 0.85rem;
+  font-size: 0.83rem;
   margin-bottom: 0.75rem;
   text-align: center;
+  background: #fff0f0;
+  padding: 0.5rem;
+  border-radius: 6px;
 }
 
 .btn-login {
   width: 100%;
-  padding: 0.85rem;
+  padding: 0.9rem;
   background: #da291c;
   color: #fff;
   border: none;
   border-radius: 8px;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: background 0.2s;
   font-family: inherit;
+  letter-spacing: 0.02em;
 }
 
 .btn-login:disabled {
-  background: #aaa;
+  background: #bbb;
   cursor: not-allowed;
 }
 

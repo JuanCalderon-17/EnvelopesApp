@@ -4,6 +4,8 @@ export interface Envelope {
   amount: number;
   recordedAt: string;
   workerId: number;
+  workerName: string;
+  kiosko: string;
 }
 
 export interface LoginResponse {
@@ -17,4 +19,9 @@ export interface CreateEnvelopeDto {
   code: string;
   amount: number;
   workerId: number;
+}
+
+export interface UpdateEnvelopeDto {
+  code: string;
+  amount: number;
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using cdpTracker_Api.Data;
@@ -11,9 +12,11 @@ using cdpTracker_Api.Data;
 namespace cdpTracker_Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260418194254_RenameWorkersToKiosks")]
+    partial class RenameWorkersToKiosks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,7 +86,7 @@ namespace cdpTracker_Api.Migrations
                             Id = 1,
                             Kiosko = 0,
                             Name = "Kiosko 2",
-                            PasswordHash = "$2a$11$iE/mpYk0zTDDKPDtfhxPyOZ2lFfxnlAGP/sn0p.yR3PQZtG7e3OS2",
+                            PasswordHash = "kiosko2",
                             Role = 0
                         },
                         new
@@ -91,7 +94,7 @@ namespace cdpTracker_Api.Migrations
                             Id = 2,
                             Kiosko = 1,
                             Name = "Kiosko 3",
-                            PasswordHash = "$2a$11$Qhy6d5hyPmjk5kIKhJ8kSek.0wObNSSsHzE6B83DFnnNW6R1cN9sm",
+                            PasswordHash = "kiosko3",
                             Role = 0
                         },
                         new
@@ -99,7 +102,7 @@ namespace cdpTracker_Api.Migrations
                             Id = 3,
                             Kiosko = 2,
                             Name = "Kiosko 5",
-                            PasswordHash = "$2a$11$i8X0D4..nZMXolIfRO9RZOS9NZUclVLIZydpOjlej.S7D2m5fUnU.",
+                            PasswordHash = "kiosko5",
                             Role = 0
                         });
                 });

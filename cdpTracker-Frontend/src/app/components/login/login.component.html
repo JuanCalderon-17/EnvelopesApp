@@ -1,16 +1,21 @@
 <div class="login-container">
   <div class="login-card">
+
+    <div class="login-logo">
+      <img src="/kiosko.jpg" alt="Kiosko" style="width:80px;height:80px;object-fit:cover;border-radius:50%;border:3px solid #da291c;" />
+    </div>
+
     <h1 class="login-title">Envelopes App</h1>
-    <p class="login-subtitle">Iniciar sesión</p>
+    <p class="login-subtitle">Kioscos McDonald's</p>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label for="name">Nombre de usuario</label>
+        <label for="name">Usuario</label>
         <input
           id="name"
           type="text"
           formControlName="name"
-          placeholder="Ej. Juan Calderon"
+          placeholder="Nombre de kiosko"
           autocomplete="username"
         />
       </div>
@@ -21,7 +26,7 @@
           id="password"
           type="password"
           formControlName="password"
-          placeholder="Contraseña"
+          placeholder="••••••••"
           autocomplete="current-password"
         />
       </div>
@@ -34,5 +39,6 @@
         {{ isLoading ? 'Ingresando...' : 'Ingresar' }}
       </button>
     </form>
+
   </div>
 </div>

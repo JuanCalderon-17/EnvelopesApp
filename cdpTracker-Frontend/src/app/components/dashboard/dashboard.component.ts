@@ -27,10 +27,22 @@ export class DashboardComponent implements OnInit {
   dayGroups: DayGroup[] = [];
   totalCount = 0;
   totalAmount = 0;
+
+  // Create form state
   showForm = false;
   createForm: FormGroup;
   createError = '';
   isSubmitting = false;
+
+  // Edit state — tracks which envelope card is in edit mode
+  editingId: number | null = null;
+  editForm: FormGroup;
+  editError = '';
+  isSaving = false;
+
+  // Delete state — tracks which envelope is pending confirmation
+  deletingId: number | null = null;
+  isDeleting = false;
 
   private DAY_LABELS = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
@@ -44,6 +56,10 @@ export class DashboardComponent implements OnInit {
       code: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4)]],
       amount: [null, [Validators.required, Validators.min(0.01)]]
     });
+    this.editForm = this.fb.group({
+      code: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4)]],
+      amount: [null, [Validators.required, Validators.min(0.01)]]
+    });
   }
 
   ngOnInit(): void {
@@ -52,8 +68,7 @@ export class DashboardComponent implements OnInit {
   }
 
   loadEnvelopes(): void {
-    const workerId = this.authService.getWorkerId();
-    this.envelopeService.getEnvelopeByWorker(workerId).pipe(
+    this.envelopeService.getAllEnvelopes().pipe(
       catchError(() => of([]))
     ).subscribe(data => {
       this.allEnvelopes = data;
@@ -114,20 +129,11 @@ export class DashboardComponent implements OnInit {
     return d.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit' });
   }
 
-  previousWeek(): void {
-    this.weekOffset--;
-    this.buildWeekView();
-  }
+  previousWeek(): void { this.weekOffset--; this.buildWeekView(); }
+  nextWeek(): void { this.weekOffset++; this.buildWeekView(); }
+  isCurrentWeek(): boolean { return this.weekOffset === 0; }
 
-  nextWeek(): void {
-    this.weekOffset++;
-    this.buildWeekView();
-  }
-
-  isCurrentWeek(): boolean {
-    return this.weekOffset === 0;
-  }
-
+  // ---- Create ----
   toggleForm(): void {
     this.showForm = !this.showForm;
     this.createError = '';
@@ -155,13 +161,72 @@ export class DashboardComponent implements OnInit {
       },
       error: (err) => {
         this.isSubmitting = false;
-        if (err.status === 400) {
-          this.createError = typeof err.error === 'string'
-            ? err.error
-            : 'El código ya existe hoy o los datos son inválidos.';
-        } else {
-          this.createError = 'Error al guardar. Intenta de nuevo.';
-        }
+        this.createError = typeof err.error === 'string'
+          ? err.error
+          : 'El código ya existe hoy o los datos son inválidos.';
+      }
+    });
+  }
+
+  // ---- Edit ----
+  startEdit(env: Envelope): void {
+    this.editingId = env.id;
+    this.deletingId = null; // cancel any pending delete
+    this.editError = '';
+    this.editForm.setValue({ code: env.code, amount: env.amount });
+  }
+
+  cancelEdit(): void {
+    this.editingId = null;
+    this.editError = '';
+  }
+
+  saveEdit(envId: number): void {
+    if (this.editForm.invalid) return;
+    this.isSaving = true;
+    this.editError = '';
+
+    const dto = {
+      code: this.editForm.value.code as string,
+      amount: parseFloat(this.editForm.value.amount)
+    };
+
+    this.envelopeService.updateEnvelope(envId, dto).subscribe({
+      next: () => {
+        this.isSaving = false;
+        this.editingId = null;
+        this.loadEnvelopes();
+      },
+      error: (err) => {
+        this.isSaving = false;
+        this.editError = typeof err.error === 'string'
+          ? err.error
+          : 'Error al actualizar. Intenta de nuevo.';
+      }
+    });
+  }
+
+  // ---- Delete ----
+  startDelete(envId: number): void {
+    this.deletingId = envId;
+    this.editingId = null; // cancel any active edit
+  }
+
+  cancelDelete(): void {
+    this.deletingId = null;
+  }
+
+  confirmDelete(envId: number): void {
+    this.isDeleting = true;
+    this.envelopeService.deleteEnvelope(envId).subscribe({
+      next: () => {
+        this.isDeleting = false;
+        this.deletingId = null;
+        this.loadEnvelopes();
+      },
+      error: () => {
+        this.isDeleting = false;
+        this.deletingId = null;
       }
     });
   }

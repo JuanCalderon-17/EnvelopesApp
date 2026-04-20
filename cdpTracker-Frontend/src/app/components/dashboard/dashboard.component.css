@@ -25,9 +25,26 @@
   z-index: 10;
 }
 
+.header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  justify-content: center;
+
+}
+
+.header-label {
+  font-size: 0.65rem;
+  opacity: 0.75;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
 .kiosk-name {
-  font-weight: 700;
-  font-size: 1rem;
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+  text-align: center;
 }
 
 .btn-logout {
@@ -145,6 +162,162 @@
   color: #888;
   min-width: 2.5rem;
   text-align: right;
+}
+
+.env-kiosko {
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: #f0f0f0;
+  color: #555;
+  border-radius: 4px;
+  padding: 0.15rem 0.4rem;
+  min-width: 2rem;
+  text-align: center;
+}
+
+/* ---- Card action buttons (edit / delete) ---- */
+.card-actions {
+  display: flex;
+  gap: 0.25rem;
+  margin-left: 0.5rem;
+}
+
+.btn-edit,
+.btn-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.2rem 0.3rem;
+  border-radius: 4px;
+  line-height: 1;
+}
+
+.btn-edit {
+  color: #555;
+}
+
+.btn-edit:active {
+  background: #eee;
+}
+
+.btn-delete {
+  color: #c0392b;
+}
+
+.btn-delete:active {
+  background: #fdecea;
+}
+
+/* ---- Inline edit mode ---- */
+.envelope-card.editing {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0.75rem;
+}
+
+.edit-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.edit-input {
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.edit-input:focus {
+  border-color: #da291c;
+}
+
+.edit-error {
+  color: #c0392b;
+  font-size: 0.8rem;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-cancel-edit {
+  flex: 1;
+  padding: 0.55rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-save {
+  flex: 1;
+  padding: 0.55rem;
+  border: none;
+  border-radius: 6px;
+  background: #27ae60;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-save:disabled {
+  background: #aaa;
+}
+
+/* ---- Delete confirmation mode ---- */
+.envelope-card.deleting {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.6rem;
+  background: #fff8f8;
+  border: 1.5px solid #f5c6c6;
+}
+
+.delete-question {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.delete-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-cancel-del {
+  flex: 1;
+  padding: 0.55rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-confirm-del {
+  flex: 1;
+  padding: 0.55rem;
+  border: none;
+  border-radius: 6px;
+  background: #c0392b;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-confirm-del:disabled {
+  background: #aaa;
 }
 
 /* ---- FAB ---- */
