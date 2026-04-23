@@ -49,12 +49,15 @@ builder.Services.AddAuthentication(options =>
 });
 
 
-// Cors configuration, allow request from the frontend app running on localhost 4200
+// Allowed origins from environment variable  or fallback to localhost
+var allowedOrigins = (Environment.GetEnvironmentVariable("ALLOWED_ORIGINS") ?? "http://localhost:4200")
+    .Split(',', StringSplitOptions.RemoveEmptyEntries);
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("allowAngularDevClient", policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
