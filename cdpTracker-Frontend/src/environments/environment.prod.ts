@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://TU-DOMINIO-AQUI.com/api'  // <-- cambiar al dominio real
+  apiUrl: 'https://TU-RENDER-URL.onrender.com/api'  // reemplazar con URL real de Render
 };
