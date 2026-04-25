@@ -85,18 +85,25 @@ namespace cdpTracker_Api.Controllers
             if (workerIdClaim != request.WorkerId)
                 return Unauthorized("You are not authorized to create an envelope for this worker.");
 
-            var today = DateTime.UtcNow.Date;
+            var recordedAt = request.RecordedAt.HasValue
+                ? DateTime.SpecifyKind(request.RecordedAt.Value, DateTimeKind.Utc)
+                : DateTime.UtcNow;
+
+            if (recordedAt.Date > DateTime.UtcNow.Date)
+                return BadRequest("No puedes registrar un sobre para una fecha futura.");
+
+            var targetDate = recordedAt.Date;
             var envelopeCodeExist = await _context.Envelopes
-                .AnyAsync(e => e.Code == request.Code && e.RecordedAt.Date == today);
+                .AnyAsync(e => e.Code == request.Code && e.RecordedAt.Date == targetDate);
             if (envelopeCodeExist)
-                return BadRequest("An envelope with this code already exists today. Please use a unique code.");
+                return BadRequest("Ya existe un sobre con este código en esa fecha.");
 
             var newEnvelope = new Envelope
             {
                 Code = request.Code,
                 Amount = request.Amount,
                 WorkerId = request.WorkerId,
-                RecordedAt = DateTime.UtcNow,
+                RecordedAt = recordedAt,
             };
 
             _context.Envelopes.Add(newEnvelope);

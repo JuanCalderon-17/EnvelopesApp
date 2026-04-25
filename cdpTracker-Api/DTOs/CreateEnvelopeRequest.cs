@@ -14,5 +14,7 @@ namespace cdpTracker_Api.DTOs
 
         [Required]
         public int WorkerId { get; set; }
+
+        public DateTime? RecordedAt { get; set; }
     }
 }

@@ -107,6 +107,23 @@
       <h3>Nuevo Sobre</h3>
       <form [formGroup]="createForm" (ngSubmit)="submitEnvelope()">
         <div class="form-group">
+          <label>Fecha del sobre</label>
+          <div class="day-picker">
+            @for (day of weekDays; track day.date) {
+              <button
+                type="button"
+                class="day-btn"
+                [class.selected]="isSelectedDay(day.date)"
+                [class.today]="isToday(day.date)"
+                [disabled]="isFutureDay(day.date)"
+                (click)="selectDay(day.date)">
+                <span class="day-name">{{ day.label }}</span>
+                <span class="day-num">{{ day.dayNum }}</span>
+              </button>
+            }
+          </div>
+        </div>
+        <div class="form-group">
           <label for="code">Código (4 dígitos)</label>
           <input id="code" type="text" formControlName="code"
             maxlength="4" inputmode="numeric" placeholder="0000" />

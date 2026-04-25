@@ -33,6 +33,10 @@ export class DashboardComponent implements OnInit {
   createForm: FormGroup;
   createError = '';
   isSubmitting = false;
+  weekDays: { date: Date; label: string; dayNum: number }[] = [];
+  selectedDate: Date = new Date();
+
+  private SHORT_LABELS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
   // Edit state — tracks which envelope card is in edit mode
   editingId: number | null = null;
@@ -138,6 +142,38 @@ export class DashboardComponent implements OnInit {
     this.showForm = !this.showForm;
     this.createError = '';
     this.createForm.reset();
+    if (this.showForm) {
+      this.weekDays = this.buildWeekDays();
+      this.selectedDate = this.getDefaultDate();
+    }
+  }
+
+  buildWeekDays(): { date: Date; label: string; dayNum: number }[] {
+    const weekStart = this.getWeekStart(new Date(), this.weekOffset);
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(weekStart);
+      d.setDate(d.getDate() + i);
+      return { date: d, label: this.SHORT_LABELS[d.getDay()], dayNum: d.getDate() };
+    });
+  }
+
+  getDefaultDate(): Date {
+    if (this.weekOffset === 0) return new Date();
+    return this.getWeekStart(new Date(), this.weekOffset);
+  }
+
+  selectDay(d: Date): void { this.selectedDate = d; }
+
+  isSelectedDay(d: Date): boolean {
+    return d.toDateString() === this.selectedDate.toDateString();
+  }
+
+  isToday(d: Date): boolean {
+    return d.toDateString() === new Date().toDateString();
+  }
+
+  isFutureDay(d: Date): boolean {
+    return d > new Date();
   }
 
   submitEnvelope(): void {
@@ -145,10 +181,14 @@ export class DashboardComponent implements OnInit {
     this.isSubmitting = true;
     this.createError = '';
 
+    const noon = new Date(this.selectedDate);
+    noon.setHours(12, 0, 0, 0);
+
     const dto = {
       code: this.createForm.value.code as string,
       amount: parseFloat(this.createForm.value.amount),
-      workerId: this.authService.getWorkerId()
+      workerId: this.authService.getWorkerId(),
+      recordedAt: noon.toISOString()
     };
 
     this.envelopeService.createEnvelope(dto).subscribe({
@@ -156,14 +196,13 @@ export class DashboardComponent implements OnInit {
         this.isSubmitting = false;
         this.showForm = false;
         this.createForm.reset();
-        this.weekOffset = 0;
         this.loadEnvelopes();
       },
       error: (err) => {
         this.isSubmitting = false;
         this.createError = typeof err.error === 'string'
           ? err.error
-          : 'El código ya existe hoy o los datos son inválidos.';
+          : 'El código ya existe en esa fecha o los datos son inválidos.';
       }
     });
   }

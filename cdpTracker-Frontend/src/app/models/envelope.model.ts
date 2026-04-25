@@ -19,6 +19,7 @@ export interface CreateEnvelopeDto {
   code: string;
   amount: number;
   workerId: number;
+  recordedAt: string;
 }
 
 export interface UpdateEnvelopeDto {

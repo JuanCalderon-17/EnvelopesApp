@@ -437,3 +437,60 @@
   background: #aaa;
   cursor: not-allowed;
 }
+
+/* ---- Day picker ---- */
+.day-picker {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.day-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.45rem 0.2rem;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.day-btn .day-name {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+}
+
+.day-btn .day-num {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #222;
+}
+
+.day-btn.selected {
+  border-color: #da291c;
+  background: #da291c;
+}
+
+.day-btn.selected .day-name,
+.day-btn.selected .day-num {
+  color: #fff;
+}
+
+.day-btn.today:not(.selected) {
+  border-color: #da291c;
+}
+
+.day-btn.today:not(.selected) .day-num {
+  color: #da291c;
+}
+
+.day-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
