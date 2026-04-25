@@ -1,6 +1,6 @@
 {
-  "name": "Envelopes App",
-  "short_name": "Envelopes",
+  "name": "Registro de Sobres",
+  "short_name": "Sobres",
   "theme_color": "#da291c",
   "background_color": "#da291c",
   "display": "standalone",
