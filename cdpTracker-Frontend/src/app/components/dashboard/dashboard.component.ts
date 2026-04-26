@@ -27,6 +27,7 @@ export class DashboardComponent implements OnInit {
   dayGroups: DayGroup[] = [];
   totalCount = 0;
   totalAmount = 0;
+  isLoadingData = true;
 
   // Create form state
   showForm = false;
@@ -77,6 +78,7 @@ export class DashboardComponent implements OnInit {
     ).subscribe(data => {
       this.allEnvelopes = data;
       this.buildWeekView();
+      this.isLoadingData = false;
     });
   }
 

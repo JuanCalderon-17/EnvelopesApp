@@ -22,13 +22,24 @@
 
 <!-- Envelope list -->
 <main class="envelope-list">
-  @if (dayGroups.length === 0) {
-    <p class="empty-msg">No hay sobres esta semana.</p>
-  }
+  @if (isLoadingData) {
+    <div class="skeleton-wrap">
+      @for (i of [1,2,3]; track i) {
+        <div class="skeleton-day">
+          <div class="skeleton-label"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card short"></div>
+        </div>
+      }
+    </div>
+  } @else {
+    @if (dayGroups.length === 0) {
+      <p class="empty-msg">No hay sobres esta semana.</p>
+    }
 
-  @for (group of dayGroups; track group.label) {
-    <section class="day-section">
-      <h2 class="day-label">{{ group.label }}</h2>
+    @for (group of dayGroups; track group.label) {
+      <section class="day-section">
+        <h2 class="day-label">{{ group.label }}</h2>
 
       @for (env of group.envelopes; track env.id) {
 
@@ -91,7 +102,8 @@
         }
 
       }
-    </section>
+      </section>
+    }
   }
 </main>
 
