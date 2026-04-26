@@ -73,7 +73,7 @@ export class DashboardComponent implements OnInit {
   }
 
   loadEnvelopes(): void {
-    this.envelopeService.getAllEnvelopes().pipe(
+    this.envelopeService.getEnvelopeByWorker(this.authService.getWorkerId()).pipe(
       catchError(() => of([]))
     ).subscribe(data => {
       this.allEnvelopes = data;
