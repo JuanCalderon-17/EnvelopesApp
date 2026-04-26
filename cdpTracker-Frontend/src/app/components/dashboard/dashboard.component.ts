@@ -179,7 +179,10 @@ export class DashboardComponent implements OnInit {
   }
 
   submitEnvelope(): void {
-    if (this.createForm.invalid) return;
+    if (this.createForm.invalid) {
+      this.createForm.markAllAsTouched();
+      return;
+    }
     this.isSubmitting = true;
     this.createError = '';
 
