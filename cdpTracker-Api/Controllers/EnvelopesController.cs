@@ -120,12 +120,12 @@ namespace cdpTracker_Api.Controllers
             if (envelope == null)
                 return NotFound("Envelope not found.");
 
-            // Unique code per day, excluding this same envelope
-            var today = DateTime.UtcNow.Date;
+            // Unique code per day using the envelope's own date, excluding itself
+            var envelopeDate = envelope.RecordedAt.Date;
             var codeExists = await _context.Envelopes
-                .AnyAsync(e => e.Code == request.Code && e.RecordedAt.Date == today && e.Id != id);
+                .AnyAsync(e => e.Code == request.Code && e.RecordedAt.Date == envelopeDate && e.Id != id);
             if (codeExists)
-                return BadRequest("An envelope with this code already exists today.");
+                return BadRequest("Ya existe un sobre con este código en ese día.");
 
             envelope.Code = request.Code;
             envelope.Amount = request.Amount;
