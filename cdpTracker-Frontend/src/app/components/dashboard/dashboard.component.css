@@ -135,26 +135,27 @@
 
 .envelope-card {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   background: #fff;
   border-radius: 8px;
   padding: 0.7rem 1rem;
   margin-bottom: 0.5rem;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  gap: 0.25rem;
 }
 
 .env-code {
-  font-weight: 700;
-  font-size: 1rem;
+  font-weight: 800;
+  font-size: 1.25rem;
   color: #da291c;
   min-width: 3rem;
 }
 
 .env-amount {
   flex: 1;
+  font-size: 1.15rem;
+  font-weight: 700;
   text-align: center;
-  font-size: 0.95rem;
 }
 
 .env-time {
@@ -179,7 +180,7 @@
 .card-actions {
   display: flex;
   gap: 0.25rem;
-  margin-left: 0.5rem;
+  margin-left: auto;
 }
 
 .btn-edit,
@@ -383,7 +384,8 @@
   color: #333;
 }
 
-.form-group input {
+.form-group input,
+.form-group select {
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 0.75rem;
@@ -391,10 +393,45 @@
   outline: none;
   font-family: inherit;
   transition: border-color 0.2s;
+  background: #fff;
 }
 
-.form-group input:focus {
+.form-group input:focus,
+.form-group select:focus {
   border-color: #da291c;
+}
+
+.card-main {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.card-sub {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.env-type {
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: #f0f0f0;
+  border-radius: 4px;
+  padding: 0.15rem 0.45rem;
+  color: #555;
+}
+
+.env-creator {
+  font-size: 0.82rem;
+  color: #444;
+  font-weight: 500;
+}
+
+.env-creator::before {
+  content: '👤 ';
+  font-size: 0.75rem;
 }
 
 .error-message {

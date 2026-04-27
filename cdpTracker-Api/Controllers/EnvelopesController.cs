@@ -32,6 +32,8 @@ namespace cdpTracker_Api.Controllers
                     Id = e.Id,
                     Code = e.Code,
                     Amount = e.Amount,
+                    CreatorName = e.CreatorName ?? string.Empty,
+                    Type = e.Type.ToString(),
                     RecordedAt = e.RecordedAt,
                     WorkerId = e.WorkerId,
                     WorkerName = e.Worker.Name,
@@ -60,6 +62,8 @@ namespace cdpTracker_Api.Controllers
                     Code = e.Code,
                     Amount = e.Amount,
                     RecordedAt = e.RecordedAt,
+                    CreatorName = e.CreatorName ?? string.Empty,
+                    Type = e.Type.ToString(),
                     WorkerId = e.WorkerId,
                     WorkerName = e.Worker.Name,
                     Kiosko = e.Worker.Kiosko.ToString()
@@ -104,6 +108,8 @@ namespace cdpTracker_Api.Controllers
                 Amount = request.Amount,
                 WorkerId = request.WorkerId,
                 RecordedAt = recordedAt,
+                CreatorName = request.CreatorName,
+                Type = (EnvelopeType)request.Type
             };
 
             _context.Envelopes.Add(newEnvelope);
@@ -129,6 +135,9 @@ namespace cdpTracker_Api.Controllers
 
             envelope.Code = request.Code;
             envelope.Amount = request.Amount;
+            envelope.CreatorName = request.CreatorName;
+            envelope.Type = (EnvelopeType)request.Type;
+
             await _context.SaveChangesAsync();
 
             return Ok(new { Message = "Envelope updated successfully." });

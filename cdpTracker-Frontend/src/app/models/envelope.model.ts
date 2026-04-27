@@ -6,6 +6,8 @@ export interface Envelope {
   workerId: number;
   workerName: string;
   kiosko: string;
+  creatorName: string;
+  type: string;
 }
 
 export interface LoginResponse {
@@ -20,9 +22,13 @@ export interface CreateEnvelopeDto {
   amount: number;
   workerId: number;
   recordedAt: string;
+  creatorName: string;
+  type: number;
 }
 
 export interface UpdateEnvelopeDto {
   code: string;
   amount: number;
+  creatorName: string;
+  type: number;
 }

@@ -63,6 +63,17 @@
                 class="edit-input edit-amount"
                 placeholder="Monto"
               />
+              <input
+                type="text"
+                formControlName="creatorName"
+                class="edit-input"
+                placeholder="Nombre del trabajador"
+              />
+              <select formControlName="type" class="edit-input">
+                <option [ngValue]="0">Alivio</option>
+                <option [ngValue]="1">Cierre</option>
+                <option [ngValue]="2">Recupero</option>
+              </select>
               @if (editError) {
                 <p class="edit-error">{{ editError }}</p>
               }
@@ -90,10 +101,15 @@
         <!-- NORMAL MODE -->
         } @else {
           <div class="envelope-card">
-            <span class="env-kiosko">{{ env.kiosko }}</span>
-            <span class="env-code">{{ env.code }}</span>
-            <span class="env-amount">{{ env.amount | currency:'USD':'symbol':'1.2-2' }}</span>
-            <span class="env-time">{{ env.recordedAt | date:'HH:mm' }}</span>
+            <div class="card-main">
+              <span class="env-code">{{ env.code }}</span>
+              <span class="env-type">{{ env.type }}</span>
+              <span class="env-amount">{{ env.amount | currency:'USD':'symbol':'1.2-2' }}</span>
+              <span class="env-time">{{ env.recordedAt | date:'HH:mm' }}</span>
+            </div>
+            <div class="card-sub">
+              <span class="env-creator">{{ env.creatorName }}</span>
+            </div>
             <div class="card-actions">
               <button class="btn-edit" (click)="startEdit(env)" title="Editar">&#9998;</button>
               <button class="btn-delete" (click)="startDelete(env.id)" title="Eliminar">&#128465;</button>
@@ -157,6 +173,28 @@
           }
           @if (createForm.get('amount')?.touched && createForm.get('amount')?.hasError('min')) {
             <span class="field-error">El monto debe ser mayor a cero.</span>
+          }
+        </div>
+        <div class="form-group">
+          <label for="creatorName">Nombre del trabajador</label>
+          <input id="creatorName" type="text" formControlName="creatorName"
+            placeholder="Ej: Mario Soria"
+            [class.input-error]="createForm.get('creatorName')?.invalid && createForm.get('creatorName')?.touched" />
+          @if (createForm.get('creatorName')?.touched && createForm.get('creatorName')?.hasError('required')) {
+            <span class="field-error">El nombre del trabajador es obligatorio.</span>
+          }
+        </div>
+        <div class="form-group">
+          <label for="type">Tipo de sobre</label>
+          <select id="type" formControlName="type"
+            [class.input-error]="createForm.get('type')?.invalid && createForm.get('type')?.touched">
+            <option [ngValue]="null" disabled>Seleccionar tipo...</option>
+            <option [ngValue]="0">Alivio</option>
+            <option [ngValue]="1">Cierre</option>
+            <option [ngValue]="2">Recupero</option>
+          </select>
+          @if (createForm.get('type')?.touched && createForm.get('type')?.hasError('required')) {
+            <span class="field-error">El tipo de sobre es obligatorio.</span>
           }
         </div>
         @if (createError) {

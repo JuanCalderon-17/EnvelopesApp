@@ -59,11 +59,15 @@ export class DashboardComponent implements OnInit {
   ) {
     this.createForm = this.fb.group({
       code: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4)]],
-      amount: [null, [Validators.required, Validators.min(0.01)]]
+      amount: [null, [Validators.required, Validators.min(0.01)]], 
+      creatorName: ['', Validators.required],
+      type: [null, Validators.required]
     });
     this.editForm = this.fb.group({
       code: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4)]],
-      amount: [null, [Validators.required, Validators.min(0.01)]]
+      amount: [null, [Validators.required, Validators.min(0.01)]],
+      creatorName: ['', Validators.required],
+      type: [null, Validators.required]
     });
   }
 
@@ -193,7 +197,9 @@ export class DashboardComponent implements OnInit {
       code: this.createForm.value.code as string,
       amount: parseFloat(this.createForm.value.amount),
       workerId: this.authService.getWorkerId(),
-      recordedAt: noon.toISOString()
+      recordedAt: noon.toISOString(),
+      creatorName: this.createForm.value.creatorName as string,
+      type: parseInt(this.createForm.value.type)
     };
 
     this.envelopeService.createEnvelope(dto).subscribe({
@@ -214,11 +220,18 @@ export class DashboardComponent implements OnInit {
 
   // ---- Edit ----
   startEdit(env: Envelope): void {
-    this.editingId = env.id;
-    this.deletingId = null; // cancel any pending delete
-    this.editError = '';
-    this.editForm.setValue({ code: env.code, amount: env.amount });
-  }
+  this.editingId = env.id;
+  this.deletingId = null;
+  this.editError = '';
+  const typeMap: { [key: string]: number } = { 'Alivio': 0, 'Cierre': 1, 'Recupero': 2 };
+  this.editForm.setValue({
+    code: env.code,
+    amount: env.amount,
+    creatorName: env.creatorName,
+    type: typeMap[env.type] ?? 0
+  });
+}
+
 
   cancelEdit(): void {
     this.editingId = null;
@@ -226,13 +239,17 @@ export class DashboardComponent implements OnInit {
   }
 
   saveEdit(envId: number): void {
-    if (this.editForm.invalid) return;
+    if (this.editForm.invalid) {
+      this.editForm.markAllAsTouched(); return;
+    }
     this.isSaving = true;
     this.editError = '';
 
     const dto = {
       code: this.editForm.value.code as string,
-      amount: parseFloat(this.editForm.value.amount)
+      amount: parseFloat(this.editForm.value.amount),
+      creatorName: this.editForm.value.creatorName as string,
+      type: parseInt(this.editForm.value.type)
     };
 
     this.envelopeService.updateEnvelope(envId, dto).subscribe({
