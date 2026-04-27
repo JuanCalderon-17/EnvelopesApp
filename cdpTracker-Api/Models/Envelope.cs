@@ -1,5 +1,4 @@
-﻿using cdpTracker_Api.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace cdpTracker_Api.Models
 {
@@ -14,10 +13,17 @@ namespace cdpTracker_Api.Models
         [Required]
         public decimal Amount { get; set; }
 
+        [Required]
+        public string  CreatorName  {get; set;} = string.Empty;
+
+        [Required]
+        public EnvelopeType Type { get; set; }
+
         public DateTime RecordedAt { get; set; } = DateTime.UtcNow;
 
-        // Foreign Key: This links the envelope to a specific Worker
+        // Foreign Key: This links the envelope to a specific Worker(Kiosko login related)
         public int WorkerId { get; set; }
         public Worker Worker { get; set; } = null!;
     }
+
 }

@@ -1,3 +1,5 @@
+using cdpTracker_Api.Models;
+
 namespace cdpTracker_Api.DTOs
 {
     public class EnvelopeResponse
@@ -7,6 +9,8 @@ namespace cdpTracker_Api.DTOs
         public decimal Amount { get; set; }
         public DateTime RecordedAt { get; set; }
         public int WorkerId { get; set; }
+        public string Type { get; set; } = string.Empty;
+        public string CreatorName {get; set;} = string.Empty;
         public string WorkerName { get; set; } = string.Empty;
         public string Kiosko { get; set; } = string.Empty;
     }

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using cdpTracker_Api.Models;
 
 namespace cdpTracker_Api.DTOs
 {
@@ -11,6 +12,12 @@ namespace cdpTracker_Api.DTOs
         [Required]
         [Range(0.01, 1000000, ErrorMessage = "The Amount must be greater than zero")]
         public decimal Amount { get; set; }
+
+        [Required(ErrorMessage = "Please add your name to the envelope")]
+        public string CreatorName { get; set; } = string.Empty;
+        
+        [Required]
+        public int  Type { get; set; }
 
         [Required]
         public int WorkerId { get; set; }

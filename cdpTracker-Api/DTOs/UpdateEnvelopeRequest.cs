@@ -1,3 +1,5 @@
+using cdpTracker_Api.Models;
+
 using System.ComponentModel.DataAnnotations;
 
 namespace cdpTracker_Api.DTOs
@@ -11,5 +13,13 @@ namespace cdpTracker_Api.DTOs
         [Required]
         [Range(0.01, 1000000, ErrorMessage = "The Amount must be greater than zero")]
         public decimal Amount { get; set; }
+        
+        [Required]
+        [StringLength(30, MinimumLength = 3 ,ErrorMessage = "Name must be between 3 and 30 characters.")]
+        public string CreatorName { get; set; } = string.Empty;
+    
+        [Required(ErrorMessage = "The envelope must have a type")]
+        public int Type { get; set; }
+
     }
 }
