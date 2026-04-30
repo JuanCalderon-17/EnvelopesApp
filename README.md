@@ -1,4 +1,4 @@
-# cdpTracker — CDP Kiosk Envelope Manager
+#  CDP Kiosk Envelope Manager
 
 ![Angular](https://img.shields.io/badge/Angular-19-red?logo=angular&logoColor=white)
 ![.NET](https://img.shields.io/badge/.NET-9.0-purple?logo=dotnet&logoColor=white)
