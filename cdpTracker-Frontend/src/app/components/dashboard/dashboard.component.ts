@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -18,7 +18,8 @@ interface DayGroup {
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrl: './dashboard.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent implements OnInit {
   workerName = '';
@@ -55,7 +56,8 @@ export class DashboardComponent implements OnInit {
     private authService: AuthService,
     private envelopeService: EnvelopeService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef
   ) {
     this.createForm = this.fb.group({
       code: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4)]],
@@ -83,6 +85,7 @@ export class DashboardComponent implements OnInit {
       this.allEnvelopes = data;
       this.buildWeekView();
       this.isLoadingData = false;
+      this.cdr.markForCheck();
     });
   }
 
@@ -214,6 +217,7 @@ export class DashboardComponent implements OnInit {
         this.createError = typeof err.error === 'string'
           ? err.error
           : 'El código ya existe en esa fecha o los datos son inválidos.';
+        this.cdr.markForCheck();
       }
     });
   }
@@ -263,6 +267,7 @@ export class DashboardComponent implements OnInit {
         this.editError = typeof err.error === 'string'
           ? err.error
           : 'Error al actualizar. Intenta de nuevo.';
+        this.cdr.markForCheck();
       }
     });
   }
@@ -288,6 +293,7 @@ export class DashboardComponent implements OnInit {
       error: () => {
         this.isDeleting = false;
         this.deletingId = null;
+        this.cdr.markForCheck();
       }
     });
   }
