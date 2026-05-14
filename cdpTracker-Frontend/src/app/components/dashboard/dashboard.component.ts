@@ -29,6 +29,7 @@ export class DashboardComponent implements OnInit {
   totalCount = 0;
   totalAmount = 0;
   isLoadingData = true;
+  weekRangeLabel = '';
 
   // Create form state
   showForm = false;
@@ -119,6 +120,10 @@ export class DashboardComponent implements OnInit {
 
     this.totalCount = weekEnvelopes.length;
     this.totalAmount = weekEnvelopes.reduce((sum, e) => sum + e.amount, 0);
+
+    const end = new Date(weekStart);
+    end.setDate(end.getDate() + 6);
+    this.weekRangeLabel = `${this.formatDate(weekStart)} – ${this.formatDate(end)}`;
   }
 
   getWeekStart(baseDate: Date, offset: number): Date {
@@ -129,13 +134,6 @@ export class DashboardComponent implements OnInit {
     d.setDate(d.getDate() + diff);
     d.setHours(0, 0, 0, 0);
     return d;
-  }
-
-  get weekRangeLabel(): string {
-    const start = this.getWeekStart(new Date(), this.weekOffset);
-    const end = new Date(start);
-    end.setDate(end.getDate() + 6);
-    return `${this.formatDate(start)} – ${this.formatDate(end)}`;
   }
 
   formatDate(d: Date): string {
