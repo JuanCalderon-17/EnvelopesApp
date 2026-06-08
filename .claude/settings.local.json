@@ -3,7 +3,17 @@
     "allow": [
       "Read(//c/Dev/EnvelopesApp/**)",
       "Bash(curl -k -s -o /dev/null -w \"%{http_code}\" -X POST https://localhost:7091/api/auth/login -H \"Content-Type: application/json\" -d \"{\\\\\"name\\\\\":\\\\\"Admin Manager\\\\\",\\\\\"password\\\\\":\\\\\"hashed_admin_pass\\\\\"}\")",
-      "Bash(curl -k -s -X POST https://localhost:7091/api/auth/login -H \"Content-Type: application/json\" -d \"{\\\\\"name\\\\\":\\\\\"Admin Manager\\\\\",\\\\\"password\\\\\":\\\\\"hashed_admin_pass\\\\\"}\")"
+      "Bash(curl -k -s -X POST https://localhost:7091/api/auth/login -H \"Content-Type: application/json\" -d \"{\\\\\"name\\\\\":\\\\\"Admin Manager\\\\\",\\\\\"password\\\\\":\\\\\"hashed_admin_pass\\\\\"}\")",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git pull *)",
+      "Bash(git stash *)",
+      "Bash(gh pr create --title 'Speed up login: skip if valid token, lower BCrypt cost' --body ' *)",
+      "Bash(git remote *)",
+      "Bash(git checkout *)",
+      "Bash(git reset *)",
+      "PowerShell(winget install GitHub.cli --silent --accept-package-agreements --accept-source-agreements 2>&1)"
     ]
   }
 }
