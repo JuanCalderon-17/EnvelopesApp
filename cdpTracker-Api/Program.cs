@@ -86,7 +86,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapGet("/health", async (AppDbContext db) =>
+app.MapMethods("/health", ["GET", "HEAD"], async (AppDbContext db) =>
 {
     await db.Database.ExecuteSqlRawAsync("SELECT 1");
     return Results.Ok(new { status = "ok" });
