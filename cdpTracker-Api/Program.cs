@@ -10,7 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 //connection string for database
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql(connectionString, npgsql =>
+        npgsql.CommandTimeout(10)));
 
 // Add services to the container.
 builder.Services.AddControllers()
@@ -84,5 +85,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGet("/health", async (AppDbContext db) =>
+{
+    await db.Database.ExecuteSqlRawAsync("SELECT 1");
+    return Results.Ok(new { status = "ok" });
+});
 
 app.Run();
