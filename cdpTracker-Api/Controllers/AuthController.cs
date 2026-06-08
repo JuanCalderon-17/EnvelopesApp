@@ -32,6 +32,13 @@ namespace cdpTracker_Api.Controllers
             if (worker == null || !BCrypt.Net.BCrypt.Verify(request.Password, worker.PasswordHash))
                 return Unauthorized("Invalid username or password.");
 
+            // Rehash at cost 10 if the stored hash used a higher work factor
+            if (BCrypt.Net.BCrypt.PasswordNeedsRehash(worker.PasswordHash, 10))
+            {
+                worker.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password, 10);
+                await _context.SaveChangesAsync();
+            }
+
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, worker.Id.ToString()),
