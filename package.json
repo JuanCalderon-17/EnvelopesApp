@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "@anthropic-ai/claude-agent-sdk": "^0.2.112",
-    "npm": "^10.9.8",
-    "uninstall": "^0.0.0"
-  }
-}
